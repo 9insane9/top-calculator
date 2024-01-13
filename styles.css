@@ -1,7 +1,3 @@
-body {
-
-}
-
 .calculator {
     display: flex;
     flex-direction: column;
@@ -21,24 +17,21 @@ body {
 
 .buttons {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+
     margin-bottom: 20px;
 }
 
 button {
+    flex: 1 0 auto;
+    border: 1px solid red;
     font-size: 20px;
-    width: 23%;
+    width: 100px;
     height: 50px;
-    flex-grow: 1;
     margin: 2px;
 }
 
-.buttons-top {
-    display: flex;
+button:hover {
+    background-color: yellow;
 }
-
-.buttons-top > * {
-    flex-grow: 2;
-}
-
