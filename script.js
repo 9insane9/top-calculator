@@ -26,6 +26,11 @@ const memoryEl = document.querySelector(".display-top");
 const displayValueEl = document.querySelector(".display-bottom");
 const buttonList = document.querySelectorAll("button");
 
+//when result exists and a new number is entered without an operator, delete result?
+
+//need to be still able to continuosly multiply with the multiply button, 
+//without needing to press the equals button
+
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
         switch (e.target.getAttribute("id")) {
@@ -80,7 +85,13 @@ buttonList.forEach(button => {
 
                 if (result) {
                     num1 = result;
-                } else {
+                } else if (memoryEl.textContent !== "") {
+                    console.log(memoryEl.textContent)
+                    num1 = Number(memoryEl.textContent.slice(-1))
+                    console.log(`first number for continuous multiplication is ${num1}`)
+                    equals()
+                } 
+                else { //
                     num1 = Number(displayValue);
                 }
 
@@ -100,18 +111,17 @@ buttonList.forEach(button => {
                 break;
             // case "btn-point":
             //     break;
-            case "btn-equals":
-                num2 = Number(displayValue);
-                memoryEl.textContent += num2;
-                result = operate(operator, num1, num2);
-                console.log(result)
-                memoryEl.textContent = result;
-                num1 = result;
-                console.log(num1)
-                operator = "";
-                displayValue = "0";
+            case "btn-equals": //this could be a function?
+                //
+                equals();
                 break;
-         }
+        }
+
+        if (result && operator === "" && displayValue !== "0") {
+            result = 0;
+            memoryEl.textContent = result;
+        }
+        
 
         if (displayValue.length > 1 && displayValue[0] === "0") {
             displayValue = displayValue.slice(1, displayValue.length)
@@ -146,6 +156,18 @@ function clear () {
     memoryEl.textContent = ""
     result = "";
     
+}
+
+function equals () {
+    num2 = Number(displayValue);
+    memoryEl.textContent += num2;
+    result = operate(operator, num1, num2);
+    console.log(result)
+    num1 = result;
+    memoryEl.textContent = num1; 
+    console.log(num1)
+    operator = "";
+    displayValue = "0";
 }
 
 //fix issues that start with 0
