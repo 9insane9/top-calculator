@@ -87,8 +87,8 @@ buttonList.forEach(button => {
                     num1 = result;
                 } else if (memoryEl.textContent !== "") {
                     console.log(memoryEl.textContent)
-                    num1 = Number(memoryEl.textContent.slice(-1))
-                    console.log(`first number for continuous multiplication is ${num1}`)
+                    num1 = Number(memoryEl.textContent.slice(-1))//extract number from memory if memory exists
+                    console.log(`first number for continuous multiplication is ${num1}`)//suddenly number turns into 0
                     equals()
                 } 
                 else { //
