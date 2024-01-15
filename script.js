@@ -67,20 +67,7 @@ buttonList.forEach(button => {
                 clear();
                 break;
             case "btn-delete":
-                if (result && displayValue.length <= 1) {//looks ok for now
-                    if (displayValue !== "0") {
-                        displayValue = "0"
-                    } else { 
-                        clear()
-                    }
-                } else if (displayValue < 10) {
-
-                }
-                else if (displayValue.length > 1) {//if number starts with 0, remove 0
-                    displayValue = displayValue.slice(0, displayValue.length - 1);
-                } else {
-                    displayValue = "0";
-                }
+                clickDelete()
                 break;
             case "btn-multiply":
                 operator = "*";
@@ -89,7 +76,7 @@ buttonList.forEach(button => {
                     equals()
                 }
                 if (result || memoryEl.textContent) {
-                    console.log(`first number for continuous multiplication is ${num1}`)//suddenly number turns into 0
+                    console.log(`first number for continuous multiplication is ${num1}`)
                 } 
                 else { //
                     num1 = Number(displayValue);
@@ -100,7 +87,6 @@ buttonList.forEach(button => {
                     }
                 memoryEl.textContent = "";
                 memoryEl.textContent += `${num1} x `;
-                //console.log(`first number is ${num1}`);
                 break;
             case "btn-divide":
                 operator = "/"
@@ -113,7 +99,7 @@ buttonList.forEach(button => {
                 break;
             // case "btn-point":
             //     break;
-            case "btn-equals": //this could be a function?
+            case "btn-equals":
                 //
                 num2 = Number(displayValue);
                 equals();
@@ -131,7 +117,7 @@ buttonList.forEach(button => {
     })
 }) 
 
-function operate (operator, num1, num2) {
+function operate(operator, num1, num2) {
     switch (operator) {
         case "+": 
             return add(num1, num2)
@@ -144,29 +130,38 @@ function operate (operator, num1, num2) {
     }
 }
 
-function clear () {
+function clear() {
     num1 = 0;
     num2 = 0;
     operator = "";
     displayValue = "0";
     memoryEl.textContent = ""
     result = "";
-    
 }
 
-function equals () {
+function equals() {
+
     console.log(`first number is ${num1}`);
     console.log(`the second number is ${num2}`)
     memoryEl.textContent += num2;
-    //console.log(typeof num1);
-    //console.log(typeof num2);
     result = operate(operator, num1, num2);
     console.log(`result of calculation is ${result}`)
     num1 = result;
-    memoryEl.textContent = num1; 
-    //console.log(num1)
-    //operator = ""; //if this happens, there will be problems
+    memoryEl.textContent = num1;
     displayValue = "0";
 }
 
-//fix issues that start with 0
+function clickDelete() {
+    if (result && displayValue.length <= 1) {//looks ok for now
+        if (displayValue !== "0") {
+            displayValue = "0"
+        } else { 
+            clear()
+        }
+    }
+    else if (displayValue.length > 1) {//if number starts with 0, remove 0
+        displayValue = displayValue.slice(0, displayValue.length - 1);
+    } else {
+        displayValue = "0";
+    }
+}
