@@ -1,7 +1,7 @@
 function add (a, b) {
     return a + b
 }
-//refactor
+//main
 function substract (a, b) {
     return a - b
 }
