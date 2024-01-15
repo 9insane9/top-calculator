@@ -63,24 +63,11 @@ buttonList.forEach(button => {
                 displayValue += "9";
                 break;
             case "btn-clear":
-                console.log("cleared?")
+                console.log("Memory cleared!")
                 clear();
                 break;
             case "btn-delete":
-                if (result && displayValue.length <= 1) {//looks ok for now
-                    if (displayValue !== "0") {
-                        displayValue = "0"
-                    } else { 
-                        clear()
-                    }
-                } else if (displayValue < 10) {
-
-                }
-                else if (displayValue.length > 1) {//if number starts with 0, remove 0
-                    displayValue = displayValue.slice(0, displayValue.length - 1);
-                } else {
-                    displayValue = "0";
-                }
+                pressDelete()
                 break;
             case "btn-multiply":
                 operator = "*";
@@ -89,18 +76,20 @@ buttonList.forEach(button => {
                     equals()
                 }
                 if (result || memoryEl.textContent) {
-                    console.log(`first number for continuous multiplication is ${num1}`)//suddenly number turns into 0
-                } 
+                    console.log(`first number for continuous ${operator} is ${num1}`)
+                }
                 else { //
                     num1 = Number(displayValue);
+                    console.log(`this is the first operation, first number is ${num1}`)
                 }
 
                 if (!result) {
                     displayValue = "0";
                     }
+                
                 memoryEl.textContent = "";
                 memoryEl.textContent += `${num1} x `;
-                //console.log(`first number is ${num1}`);
+
                 break;
             case "btn-divide":
                 operator = "/"
@@ -111,16 +100,16 @@ buttonList.forEach(button => {
             case "btn-substract":
                 operator = "-"
                 break;
-            // case "btn-point":
+            // case "btn-point": //implement decimals and rounding
             //     break;
-            case "btn-equals": //this could be a function?
+            case "btn-equals": //does "=" need to be another operator?
                 //
                 num2 = Number(displayValue);
                 equals();
                 break;
         }
 
-        if (displayValue.length > 1 && displayValue[0] === "0") {
+        if (displayValue.length > 1 && displayValue[0] === "0") { //if number starts with zero, get rid of the zero
             displayValue = displayValue.slice(1, displayValue.length)
         }
             
@@ -144,29 +133,39 @@ function operate (operator, num1, num2) {
     }
 }
 
-function clear () {
+function clear() {
     num1 = 0;
     num2 = 0;
     operator = "";
     displayValue = "0";
     memoryEl.textContent = ""
     result = "";
-    
 }
 
-function equals () {
+function equals() {
+
+
+    console.log(`operation is ${operator}`)
     console.log(`first number is ${num1}`);
     console.log(`the second number is ${num2}`)
-    memoryEl.textContent += num2;
-    //console.log(typeof num1);
-    //console.log(typeof num2);
+    memoryEl.textContent += num2; //might be pointless, gets replaced before you get to see it, useful for debugging though
     result = operate(operator, num1, num2);
     console.log(`result of calculation is ${result}`)
     num1 = result;
     memoryEl.textContent = num1; 
-    //console.log(num1)
-    //operator = ""; //if this happens, there will be problems
     displayValue = "0";
 }
 
-//fix issues that start with 0
+function pressDelete() {
+    if (displayValue.length <= 1) {//looks ok for now
+        if (displayValue !== "0") {
+            displayValue = "0"
+        } else { 
+            clear()
+        }
+    } else if (displayValue.length > 1) {
+        displayValue = displayValue.slice(0, displayValue.length - 1);
+    } else {
+        displayValue = "0";
+    }
+}
