@@ -20,19 +20,12 @@ let operator = "";
 let result;
 
 let displayValue = "0";
-// let memoryValue = "";
 
 const memoryEl = document.querySelector(".display-top");
 const displayValueEl = document.querySelector(".display-bottom");
 const buttonList = document.querySelectorAll("button");
 
-//when result exists and a new number is entered without an operator, delete result+
-
-//need to be still able to continuosly multiply with the multiply button, 
-//without needing to press the equals button
-
-clear() //for now, this fixes bug that occurs when you enter the first number immediately
-//after starting the calculator
+clear() //for now, this fixes bug that occurs when you enter the first number immediately after starting the calculator
 
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
@@ -95,14 +88,7 @@ buttonList.forEach(button => {
                     num2 = Number(displayValue);
                     equals()
                 }
-
-                //if (result) {
-                    // equals()
-                    // num2 = 0;}else
                 if (result || memoryEl.textContent) {
-                    //console.log(memoryEl.textContent)
-                    //num1 = Number(memoryEl.textContent.slice(0))//extract number from memory if memory exists
-                    console.log(typeof num1);
                     console.log(`first number for continuous multiplication is ${num1}`)//suddenly number turns into 0
                 } 
                 else { //
@@ -114,9 +100,7 @@ buttonList.forEach(button => {
                     }
                 memoryEl.textContent = "";
                 memoryEl.textContent += `${num1} x `;
-                console.log(`first number is ${num1}`);
-
-                
+                //console.log(`first number is ${num1}`);
                 break;
             case "btn-divide":
                 operator = "/"
@@ -136,19 +120,12 @@ buttonList.forEach(button => {
                 break;
         }
 
-        // if (result && operator === "" && displayValue !== "0") {
-        //     result = 0;
-        //     memoryEl.textContent = result;
-        // }
-        
-
         if (displayValue.length > 1 && displayValue[0] === "0") {
             displayValue = displayValue.slice(1, displayValue.length)
         }
             
         displayValueEl.textContent = displayValue;
 
-        //console.clear()
         console.log(displayValue);
         console.log(num1)
     })
@@ -178,16 +155,17 @@ function clear () {
 }
 
 function equals () {
+    console.log(`first number is ${num1}`);
     console.log(`the second number is ${num2}`)
     memoryEl.textContent += num2;
-    console.log(typeof num1);
-    console.log(typeof num2);
+    //console.log(typeof num1);
+    //console.log(typeof num2);
     result = operate(operator, num1, num2);
     console.log(`result of calculation is ${result}`)
     num1 = result;
     memoryEl.textContent = num1; 
-    console.log(num1)
-    //operator = "";
+    //console.log(num1)
+    //operator = ""; //if this happens, there will be problems
     displayValue = "0";
 }
 
