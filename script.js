@@ -20,6 +20,7 @@ let operator = "";
 let result;
 
 let displayValue = "0";
+let equalsButton = false;
 
 const memoryEl = document.querySelector(".display-top");
 const displayValueEl = document.querySelector(".display-bottom");
@@ -63,28 +64,17 @@ buttonList.forEach(button => {
                 displayValue += "9";
                 break;
             case "btn-clear":
-                console.log("cleared?")
-                clear();
+                clear()
+                console.log("Memory cleared!");
                 break;
             case "btn-delete":
                 clickDelete()
                 break;
             case "btn-multiply":
                 operator = "*";
-                if (memoryEl.textContent.includes("x")) {
-                    num2 = Number(displayValue);
-                    equals()
-                }
-                if (result || memoryEl.textContent) {
-                    console.log(`first number for continuous multiplication is ${num1}`)
-                } 
-                else { //
-                    num1 = Number(displayValue);
-                }
-
-                if (!result) {
-                    displayValue = "0";
-                    }
+                equals()
+                isFirstOperation();
+                
                 memoryEl.textContent = "";
                 memoryEl.textContent += `${num1} x `;
                 break;
@@ -100,7 +90,7 @@ buttonList.forEach(button => {
             // case "btn-point":
             //     break;
             case "btn-equals":
-                //
+                equalsButton = true;
                 num2 = Number(displayValue);
                 equals();
                 break;
@@ -141,14 +131,19 @@ function clear() {
 
 function equals() {
 
-    console.log(`first number is ${num1}`);
-    console.log(`the second number is ${num2}`)
-    memoryEl.textContent += num2;
-    result = operate(operator, num1, num2);
-    console.log(`result of calculation is ${result}`)
-    num1 = result;
-    memoryEl.textContent = num1;
-    displayValue = "0";
+    if (equalsButton || memoryEl.textContent.includes("x")) {
+        num2 = displayValue
+        console.log(`first number is ${num1}`);
+        console.log(`the second number is ${num2}`)
+        memoryEl.textContent += num2;
+        result = operate(operator, num1, num2);
+        console.log(`result of calculation is ${result}`)
+        num1 = result;
+        memoryEl.textContent = num1;
+        displayValue = "0";
+    }
+
+    equalsButton = false;
 }
 
 function clickDelete() {
@@ -164,4 +159,12 @@ function clickDelete() {
     } else {
         displayValue = "0";
     }
+}
+
+function isFirstOperation() {
+    if (!result) {
+        num1 = Number(displayValue);
+        console.log(`first operation, first number is ${num1}`)
+        displayValue = "0";
+        }
 }
