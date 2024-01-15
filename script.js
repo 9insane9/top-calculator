@@ -28,7 +28,7 @@ const buttonList = document.querySelectorAll("button");
 
 clear() //for now, this fixes bug that occurs when you enter the first number immediately after starting the calculator
 
-//delete button got bugs
+//delete button bugs fixed?
 
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
@@ -168,7 +168,7 @@ function equals() {
 }
 
 function clickDelete() {
-    if (result && displayValue.length <= 1) {
+    if (displayValue.length <= 1) { //result && 
         if (displayValue !== "0") {
             displayValue = "0"
         } else { 
@@ -176,7 +176,7 @@ function clickDelete() {
         }
     }
     else if (displayValue.length > 1) {//if number starts with 0, remove 0
-        displayValue = displayValue.slice(0, displayValue.length - 1);
+        displayValue = displayValue.slice(0, displayValue.length - 1);        
     } else {
         displayValue = "0";
     }
