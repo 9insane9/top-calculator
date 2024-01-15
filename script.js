@@ -28,7 +28,7 @@ const buttonList = document.querySelectorAll("button");
 
 clear() //for now, this fixes bug that occurs when you enter the first number immediately after starting the calculator
 
-//currently when you do a calculation, then press a different operator, the previous operation does not complete, old operator is replaced with new one and immediately calculated
+//delete button got bugs
 
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
@@ -73,28 +73,36 @@ buttonList.forEach(button => {
                 clickDelete()
                 break;
             case "btn-multiply":
+                if (operator !== "") {
+                    equals()
+                }
                 operator = "*";
-                equals()
-                isFirstOperation()                
-                updateOperator(operator)
+                equals()              
+                updateOperatorDisplay(operator)
                 break;
             case "btn-divide":
+                if (operator !== "") {
+                    equals()
+                }
                 operator = "/";
-                equals()
-                isFirstOperation()                
-                updateOperator(operator)
+                equals()              
+                updateOperatorDisplay(operator)
                 break;
             case "btn-add":
+                if (operator !== "") {
+                    equals()
+                }
                 operator = "+"
-                equals()
-                isFirstOperation()                
-                updateOperator(operator)
+                equals()             
+                updateOperatorDisplay(operator)
                 break;
             case "btn-substract":
+                if (operator !== "") {
+                    equals()
+                }
                 operator = "-";
-                equals()
-                isFirstOperation()                
-                updateOperator(operator)
+                equals()              
+                updateOperatorDisplay(operator)
                 break;
             // case "btn-point":
             //     break;
@@ -143,7 +151,7 @@ function equals() {
         || memoryEl.textContent.includes("x")
         || memoryEl.textContent.includes("÷")
         || memoryEl.textContent.includes("+")
-        || memoryEl.textContent.includes("-")) { //include all operator strings in the condition
+        || memoryEl.textContent.includes("-")) {
             num2 = Number(displayValue)
             console.log(`first number is ${num1}`);
             console.log(`the second number is ${num2}`)
@@ -155,10 +163,12 @@ function equals() {
             displayValue = "0";
     }
     equalsButton = false;
+
+    isFirstOperation();
 }
 
 function clickDelete() {
-    if (result && displayValue.length <= 1) {//looks ok for now
+    if (result && displayValue.length <= 1) {
         if (displayValue !== "0") {
             displayValue = "0"
         } else { 
@@ -172,7 +182,7 @@ function clickDelete() {
     }
 }
 
-function isFirstOperation() {
+function isFirstOperation() { //maybe this can live inside the equals function?
     if (!result) {
         num1 = Number(displayValue);
         console.log(`first operation, first number is ${num1}`)
@@ -180,7 +190,7 @@ function isFirstOperation() {
         }
 }
 
-function updateOperator(operator) {
+function updateOperatorDisplay(operator) {
     let operatorSymbol;
 
     memoryEl.textContent = "";
