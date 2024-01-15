@@ -28,6 +28,8 @@ const buttonList = document.querySelectorAll("button");
 
 clear() //for now, this fixes bug that occurs when you enter the first number immediately after starting the calculator
 
+//currently when you do a calculation, then press a different operator, the previous operation does not complete, old operator is replaced with new one and immediately calculated
+
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
         switch (e.target.getAttribute("id")) {
@@ -73,19 +75,26 @@ buttonList.forEach(button => {
             case "btn-multiply":
                 operator = "*";
                 equals()
-                isFirstOperation();
-                
-                memoryEl.textContent = "";
-                memoryEl.textContent += `${num1} x `;
+                isFirstOperation()                
+                updateOperator(operator)
                 break;
             case "btn-divide":
-                operator = "/"
+                operator = "/";
+                equals()
+                isFirstOperation()                
+                updateOperator(operator)
                 break;
             case "btn-add":
                 operator = "+"
+                equals()
+                isFirstOperation()                
+                updateOperator(operator)
                 break;
             case "btn-substract":
-                operator = "-"
+                operator = "-";
+                equals()
+                isFirstOperation()                
+                updateOperator(operator)
                 break;
             // case "btn-point":
             //     break;
@@ -130,19 +139,21 @@ function clear() {
 }
 
 function equals() {
-
-    if (equalsButton || memoryEl.textContent.includes("x")) {
-        num2 = displayValue
-        console.log(`first number is ${num1}`);
-        console.log(`the second number is ${num2}`)
-        memoryEl.textContent += num2;
-        result = operate(operator, num1, num2);
-        console.log(`result of calculation is ${result}`)
-        num1 = result;
-        memoryEl.textContent = num1;
-        displayValue = "0";
+    if (equalsButton 
+        || memoryEl.textContent.includes("x")
+        || memoryEl.textContent.includes("÷")
+        || memoryEl.textContent.includes("+")
+        || memoryEl.textContent.includes("-")) { //include all operator strings in the condition
+            num2 = Number(displayValue)
+            console.log(`first number is ${num1}`);
+            console.log(`the second number is ${num2}`)
+            memoryEl.textContent += num2;
+            result = operate(operator, num1, num2);
+            console.log(`result of calculation is ${result}`)
+            num1 = result;
+            memoryEl.textContent = num1;
+            displayValue = "0";
     }
-
     equalsButton = false;
 }
 
@@ -167,4 +178,26 @@ function isFirstOperation() {
         console.log(`first operation, first number is ${num1}`)
         displayValue = "0";
         }
+}
+
+function updateOperator(operator) {
+    let operatorSymbol;
+
+    memoryEl.textContent = "";
+
+    switch (operator) {
+        case "*":
+            operatorSymbol = "x";
+            break;
+        case "/":
+            operatorSymbol = "÷";
+            break;
+        case "+":
+            operatorSymbol = "+";
+            break;
+        case "-":
+            operatorSymbol = "-";
+            break;     
+    }
+    memoryEl.textContent += `${num1} ${operatorSymbol} `;
 }
