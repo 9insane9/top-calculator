@@ -5,6 +5,7 @@
 
 html, body {
     box-sizing: border-box;
+    user-select: none;
 }
 
 body {
@@ -65,4 +66,5 @@ button {
 button:hover {
     background-color: hsla(180, 92%, 53%, 0.562);
     border-color: rgb(139, 230, 4);
+    cursor: pointer;
 }
