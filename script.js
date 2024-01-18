@@ -1,140 +1,91 @@
-function add (a, b) {
-    return a + b
-}
-//refactor
-function substract (a, b) {
-    return a - b
-}
-
-function multiply (a, b) {
-    return a * b
-}
-
-function divide (a, b) {
-    return a / b
-}
-
 let num1 = 0;
 let num2 = 0;
 let operator = "";
 let result;
-
 let displayValue = "0";
-let equalsButton = false;
 
-let noNewNumberPressed = true;//
+let equalsButton = false;
+let numKeysUntouched = true;
+let errorEncountered = false;
 
 const memoryEl = document.querySelector(".display-top");
 const displayValueEl = document.querySelector(".display-bottom");
 const buttonList = document.querySelectorAll("button");
 
-clear() //for now, this fixes bug that occurs when you enter the first number immediately after starting the calculator
+clear()                                                                                             //Clear calculator before starting
 
 console.log(`current result is ${result}`)
 
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
+        if (errorEncountered) {
+            clear()
+        }
+
         switch (e.target.getAttribute("id")) {
             case "btn-num0":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 if (displayValue !== "0") {
                     displayValue += "0";
                 }
                 break;
             case "btn-num1":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "1";
                 break;
             case "btn-num2":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "2";
                 break;
             case "btn-num3":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "3";
                 break;
             case "btn-num4":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "4";
                 break;
             case "btn-num5":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "5";
                 break;
             case "btn-num6":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "6";
                 break;
             case "btn-num7":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "7";
                 break;
             case "btn-num8":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "8";
                 break;
             case "btn-num9":
-                noNewNumberPressed = false;
+                numKeysUntouched = false;
                 displayValue += "9";
                 break;
             case "btn-clear":
-                clear()
-                console.log("Memory cleared!");
+                clear();
                 break;
             case "btn-delete":
                 clickDelete()
                 break;
             case "btn-multiply":
-                if (operator !== "" && noNewNumberPressed) {
-                    operator = "*"
-                    updateOperatorDisplay(operator)               
-                } 
-                else if (operator !== "" && !noNewNumberPressed) {//// && result !== ""
-                    equals()
-                    //updateOperatorDisplay()
-                }
-                operator = "*";
-                if (!noNewNumberPressed) {equals()}              
-                updateOperatorDisplay(operator)
+                currentOperator = "*";
+                pressOperatorButton(currentOperator);
                 break;
             case "btn-divide":
-                if (operator !== "" && noNewNumberPressed) {
-                    operator = "/"
-                    updateOperatorDisplay(operator)               
-                } 
-                else if (operator !== "" && !noNewNumberPressed) {
-                    equals()
-                    //updateOperatorDisplay()
-                }
-                operator = "/";
-                if (!noNewNumberPressed) {equals()}              
-                updateOperatorDisplay(operator)
+                currentOperator = "/";
+                pressOperatorButton(currentOperator);
                 break;
             case "btn-add":
-                if (operator !== "" && noNewNumberPressed) {
-                    operator = "+"
-                    updateOperatorDisplay(operator)               
-                } 
-                else if (operator !== "" && !noNewNumberPressed) {
-                    equals()
-                    //updateOperatorDisplay()
-                }
-                operator = "+"
-                if (!noNewNumberPressed) {equals()}             
-                updateOperatorDisplay(operator)
+                currentOperator = "+";
+                pressOperatorButton(currentOperator);
                 break;
-            case "btn-substract":
-                if (operator !== "" && noNewNumberPressed) {
-                    operator = "-"
-                    updateOperatorDisplay(operator)               
-                } 
-                else if (operator !== "" && !noNewNumberPressed) {
-                    equals()
-                    //updateOperatorDisplay()
-                }
-                operator = "-";
-                if (!noNewNumberPressed) {equals()}              
-                updateOperatorDisplay(operator)
+            case "btn-substract": //implement negative numbers if no key has been pressed
+                currentOperator = "-";
+                pressOperatorButton(currentOperator);
                 break;
              case "btn-point":
                 if (displayValue.includes(".")) {
@@ -144,20 +95,19 @@ buttonList.forEach(button => {
                 }
                  break;
             case "btn-equals":
-                equalsButton = true;
-                num2 = Number(displayValue);
-                equals();
-                break;
+                if (operator !== "") {
+                    equalsButton = true;
+                    num2 = Number(displayValue);
+                    equals();
+                }
+                break;         
         }
 
         if (displayValue.length > 1 && displayValue[0] === "0" && displayValue[1] !== ".") {
             displayValue = displayValue.slice(1, displayValue.length)
         }
-            
-        displayValueEl.textContent = displayValue;
 
-        //console.log(displayValue);
-        console.log(num1)
+        displayValueEl.textContent = displayValue;
     })
 }) 
 
@@ -175,13 +125,15 @@ function operate(operator, num1, num2) {
 }
 
 function clear() {
-    num1 = null;//these used to be 0
+    num1 = null;
     num2 = null;
     operator = "";
     displayValue = "0";
     memoryEl.textContent = ""
     result = "";
-    noNewNumberPressed = true;//
+    numKeysUntouched = true;
+    errorEncountered = false;
+    console.log("Memory cleared!")
 }
 
 function equals() {
@@ -189,20 +141,24 @@ function equals() {
         || memoryEl.textContent.includes("x")
         || memoryEl.textContent.includes("/")
         || memoryEl.textContent.includes("+")
-        || memoryEl.textContent.includes("-")) {
+        || memoryEl.textContent.includes("-")) {                                                    //check if calculation actually needs to happen
             num2 = Number(displayValue)
-            console.log(`first number is ${num1}`);
-            console.log(`the second number is ${num2}`)
-            memoryEl.textContent += num2;
-            result = operate(operator, num1, num2);
-            console.log(`result of calculation is ${result}`)
-            num1 = result;
-            memoryEl.textContent = num1;
+            checkForIllegalOperation();
 
-            num2 = null;///
-            operator = "";//
-            displayValue = "0";
-            noNewNumberPressed = true;
+            if (!errorEncountered) {
+                console.log(`first number is ${num1}`);
+                console.log(`the second number is ${num2}`)
+                memoryEl.textContent += num2;
+                result = operate(operator, num1, num2);
+                console.log(`result of calculation is ${result}`)
+                num1 = result;
+                memoryEl.textContent = num1;
+
+                num2 = null;///
+                operator = "";//
+                displayValue = "0";
+                numKeysUntouched = true;
+            }
     }
     equalsButton = false;
 
@@ -210,26 +166,30 @@ function equals() {
 }
 
 function clickDelete() {
-    if (displayValue.length <= 1) {
+    if (displayValue.charAt(displayValue.length - 2) === ".") {                                     //if there is a decimal that isnt followed by a number, get rid of it
+        displayValue = displayValue.slice(0, displayValue.length - 1)
+    }
+
+    if (displayValue.length === 1) {                                                                //if a single number is on the display, set to 0, if it is already 0, clear calculator
         if (displayValue !== "0") {
             displayValue = "0"
         } else { 
             clear()
         }
     }
-    else if (displayValue.length > 1) {//if number starts with 0, remove 0
+    else if (displayValue.length > 1) {                                                             //if number starts with 0, remove 0
         displayValue = displayValue.slice(0, displayValue.length - 1);        
     } else {
         displayValue = "0";
     }
 }
 
-function isFirstOperation() { //maybe this can live inside the equals function?
-    if (!result) {
+function isFirstOperation() {
+    if (!result && !errorEncountered) {
         num1 = Number(displayValue);
         console.log(`first operation, first number is ${num1}`)
         displayValue = "0";
-        noNewNumberPressed = true;
+        numKeysUntouched = true;
         }
 }
 
@@ -251,4 +211,49 @@ function updateOperatorDisplay(operator) {
             break;     
     }
     memoryEl.textContent = `${num1} ${operatorSymbol} `;
+}
+
+function pressOperatorButton (currentOperator) {
+    if (!result && displayValue === "0" && memoryEl.textContent === "") {                           //if an operator is pressed before entering a number, use 0 as first number
+        num1 = Number(displayValue); 
+    }
+
+    if ((operator !== "" && numKeysUntouched)) {                                                    //allow change of operator until a second number is entered
+        operator = currentOperator
+        updateOperatorDisplay(operator)               
+    } else if (operator !== "" && !numKeysUntouched) {                                              //if a second number was entered, perform calculation instead
+        equals()
+    }
+    operator = currentOperator;
+    if (!numKeysUntouched) {equals()}              
+    updateOperatorDisplay(operator)
+}
+
+function add (a, b) {                                                                               //below functions perform actual operations
+    return a + b
+}
+//refactor
+function substract (a, b) {
+    return a - b
+}
+
+function multiply (a, b) {
+    return a * b
+}
+
+function divide (a, b) {
+    return a / b
+}
+
+function checkForIllegalOperation () {                                                              //prevent division by 0
+    if (operator === "/" && num2 === 0) {
+        console.log("you tried to be sneaky")
+        errorEncountered = true;
+        displayErrorMessage()
+    }
+}
+
+function displayErrorMessage () {
+        memoryEl.textContent = ""
+        displayValue = "we dont do that around here"
 }
