@@ -150,7 +150,7 @@ buttonList.forEach(button => {
                 break;
         }
 
-        if (displayValue.length > 1 && displayValue[0] === "0") {
+        if (displayValue.length > 1 && displayValue[0] === "0" && displayValue[1] !== ".") {
             displayValue = displayValue.slice(1, displayValue.length)
         }
             
