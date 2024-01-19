@@ -14,8 +14,6 @@ const buttonList = document.querySelectorAll("button");
 
 clear()                                                                                             //Clear calculator before starting
 
-console.log(`current result is ${result}`)
-
 buttonList.forEach(button => {
     button.addEventListener("click", (e) => {
         if (errorEncountered) {
@@ -25,25 +23,35 @@ buttonList.forEach(button => {
         switch (e.target.getAttribute("id")) {
             case "btn-num0":
                 numKeysUntouched = false;
-                if (displayValue !== "0") { //implement disallowing if there is "-0"
-                    displayValue += "0";
+                if (!numberTooLong()) {
+                    if (displayValue !== "0") {
+                        displayValue += "0";
+                    }
                 }
                 break;
             case "btn-num1":
                 numKeysUntouched = false;
-                displayValue += "1";
+                if (!numberTooLong()) {
+                    displayValue += "1";
+                }
                 break;
             case "btn-num2":
                 numKeysUntouched = false;
-                displayValue += "2";
+                if (!numberTooLong()) {
+                    displayValue += "2";
+                }
                 break;
             case "btn-num3":
                 numKeysUntouched = false;
-                displayValue += "3";
+                if (!numberTooLong()) {
+                    displayValue += "3";
+                }
                 break;
             case "btn-num4":
                 numKeysUntouched = false;
-                displayValue += "4";
+                if (!numberTooLong()) {
+                    displayValue += "4";
+                }
                 break;
             case "btn-num5":
                 numKeysUntouched = false;
@@ -51,19 +59,27 @@ buttonList.forEach(button => {
                 break;
             case "btn-num6":
                 numKeysUntouched = false;
-                displayValue += "6";
+                if (!numberTooLong()) {
+                    displayValue += "6";
+                }
                 break;
             case "btn-num7":
                 numKeysUntouched = false;
-                displayValue += "7";
+                if (!numberTooLong()) {
+                    displayValue += "7";
+                }
                 break;
             case "btn-num8":
                 numKeysUntouched = false;
-                displayValue += "8";
+                if (!numberTooLong()) {
+                    displayValue += "8";
+                }
                 break;
             case "btn-num9":
                 numKeysUntouched = false;
-                displayValue += "9";
+                if (!numberTooLong()) {
+                    displayValue += "9";
+                }
                 break;
             case "btn-clear":
                 clear();
@@ -102,14 +118,14 @@ buttonList.forEach(button => {
                 }
                 break;
             case "btn-plus-minus":
-                if (displayValue.charAt(0) !== "-" && !errorEncountered) {
+                if (displayValue.charAt(0) !== "-") {
                     displayValue = "-" + displayValue;
                 } else if (displayValue.charAt(0) === "-") {
                     displayValue = displayValue.slice(1, displayValue.length)
                 }
                 break;
             case "btn-percent":
-                if (displayValue !== "0" && !errorEncountered) {
+                if (displayValue !== "0") {
                     displayValue = (Number(displayValue) / 100).toString()
                 }
                 break;
@@ -157,7 +173,7 @@ function equals() {
         || memoryEl.textContent.includes("x")
         || memoryEl.textContent.includes("/")
         || memoryEl.textContent.includes("+")
-        || memoryEl.textContent.charAt(memoryEl.textContent.length - 2 === "-")) {                                                    //check if calculation actually needs to happen
+        || memoryEl.textContent.charAt(memoryEl.textContent.length - 2 === "-")) {                          //check if calculation actually needs to happen
             num2 = Number(displayValue)
             checkForIllegalOperation();
 
@@ -165,7 +181,7 @@ function equals() {
                 console.log(`first number is ${num1}`);
                 console.log(`the second number is ${num2}`)
                 memoryEl.textContent += num2;
-                result = operate(operator, num1, num2);
+                result = Math.round((operate(operator, num1, num2)) * 10000000000) / 10000000000;
                 console.log(`result of calculation is ${result}`)
                 num1 = result;
                 memoryEl.textContent = num1;
@@ -184,22 +200,23 @@ function equals() {
 function clickDelete() {
     if (displayValue.length === 2 && displayValue.charAt(0) === "-") {                              
         displayValue = "0"
-    }
-    if (displayValue.charAt(displayValue.length - 2) === ".") {                                     //if there is a decimal that isnt followed by a number, get rid of it
-        displayValue = displayValue.slice(0, displayValue.length - 1)
-    }
-
-    if (displayValue.length === 1) {                                                                //if a single number is on the display, set to 0, if it is already 0, clear calculator
-        if (displayValue !== "0") {
-            displayValue = "0"
-        } else { 
-            clear()
-        }
-    }
-    else if (displayValue.length > 1) {                                                             //if number starts with 0, remove 0
-        displayValue = displayValue.slice(0, displayValue.length - 1);        
     } else {
-        displayValue = "0";
+        if (displayValue.charAt(displayValue.length - 2) === ".") {                                     //if there is a decimal that isnt followed by a number, get rid of it
+            displayValue = displayValue.slice(0, displayValue.length - 1)
+        }
+
+        if (displayValue.length === 1) {                                                                //if a single number is on the display, set to 0, if it is already 0, clear calculator
+            if (displayValue !== "0") {
+                displayValue = "0"
+            } else { 
+                clear()
+            }
+        }
+        else if (displayValue.length > 1) {                                                             //if number starts with 0, remove 0
+            displayValue = displayValue.slice(0, displayValue.length - 1);        
+        } else {
+            displayValue = "0";
+        }
     }
 }
 
@@ -264,6 +281,10 @@ function divide (a, b) {
     return a / b
 }
 
+function numberTooLong() {
+    return displayValue.length > 15
+}
+
 function checkForIllegalOperation () {                                                              //prevent division by 0
     if (operator === "/" && num2 === 0) {
         console.log("you tried to be sneaky")
@@ -276,3 +297,7 @@ function displayErrorMessage () {
         memoryEl.textContent = ""
         displayValue = "we dont do that around here"
 }
+
+//implement display length limit and result rounding
+
+//fix pesky error: sometimes when the operator display is updated, operator is undefined
