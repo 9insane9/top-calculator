@@ -55,7 +55,9 @@ buttonList.forEach(button => {
                 break;
             case "btn-num5":
                 numKeysUntouched = false;
-                displayValue += "5";
+                if (!numberTooLong()) {
+                    displayValue += "5";
+                }
                 break;
             case "btn-num6":
                 numKeysUntouched = false;
@@ -181,7 +183,7 @@ function equals() {
                 console.log(`first number is ${num1}`);
                 console.log(`the second number is ${num2}`)
                 memoryEl.textContent += num2;
-                result = Math.round((operate(operator, num1, num2)) * 10000000000) / 10000000000;
+                result = Math.round((operate(operator, num1, num2)) * 100000000) / 100000000;
                 console.log(`result of calculation is ${result}`)
                 num1 = result;
                 memoryEl.textContent = num1;
