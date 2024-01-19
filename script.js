@@ -25,7 +25,7 @@ buttonList.forEach(button => {
         switch (e.target.getAttribute("id")) {
             case "btn-num0":
                 numKeysUntouched = false;
-                if (displayValue !== "0") {
+                if (displayValue !== "0") { //implement disallowing if there is "-0"
                     displayValue += "0";
                 }
                 break;
@@ -83,7 +83,7 @@ buttonList.forEach(button => {
                 currentOperator = "+";
                 pressOperatorButton(currentOperator);
                 break;
-            case "btn-substract": //implement negative numbers if no key has been pressed
+            case "btn-substract": 
                 currentOperator = "-";
                 pressOperatorButton(currentOperator);
                 break;
@@ -100,11 +100,27 @@ buttonList.forEach(button => {
                     num2 = Number(displayValue);
                     equals();
                 }
-                break;         
+                break;
+            case "btn-plus-minus":
+                if (displayValue.charAt(0) !== "-" && !errorEncountered) {
+                    displayValue = "-" + displayValue;
+                } else if (displayValue.charAt(0) === "-") {
+                    displayValue = displayValue.slice(1, displayValue.length)
+                }
+                break;
+            case "btn-percent":
+                if (displayValue !== "0" && !errorEncountered) {
+                    displayValue = (Number(displayValue) / 100).toString()
+                }
+                break;
         }
 
-        if (displayValue.length > 1 && displayValue[0] === "0" && displayValue[1] !== ".") {
+        if (displayValue.length > 1 && displayValue[0] === "0" && displayValue[1] !== ".") {                //if there is a zero at the beginning but no decimal, slice off zero
             displayValue = displayValue.slice(1, displayValue.length)
+        }
+
+        if (displayValue[0] === "-" && displayValue[1] === "0" && displayValue[2] !== ".") {                //same as below, except for negative numbers
+            displayValue = displayValue[0] + displayValue[displayValue.length - 1];
         }
 
         displayValueEl.textContent = displayValue;
@@ -141,7 +157,7 @@ function equals() {
         || memoryEl.textContent.includes("x")
         || memoryEl.textContent.includes("/")
         || memoryEl.textContent.includes("+")
-        || memoryEl.textContent.includes("-")) {                                                    //check if calculation actually needs to happen
+        || memoryEl.textContent.charAt(memoryEl.textContent.length - 2 === "-")) {                                                    //check if calculation actually needs to happen
             num2 = Number(displayValue)
             checkForIllegalOperation();
 
@@ -166,6 +182,9 @@ function equals() {
 }
 
 function clickDelete() {
+    if (displayValue.length === 2 && displayValue.charAt(0) === "-") {                              
+        displayValue = "0"
+    }
     if (displayValue.charAt(displayValue.length - 2) === ".") {                                     //if there is a decimal that isnt followed by a number, get rid of it
         displayValue = displayValue.slice(0, displayValue.length - 1)
     }
