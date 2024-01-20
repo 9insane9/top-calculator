@@ -137,7 +137,7 @@ buttonList.forEach(button => {
             displayValue = displayValue.slice(1, displayValue.length)
         }
 
-        if (displayValue[0] === "-" && displayValue[1] === "0" && displayValue[2] !== ".") {                //same as below, except for negative numbers
+        if (displayValue[0] === "-" && displayValue[1] === "0" && displayValue[2] !== ".") {                //same as above, except for negative numbers
             displayValue = displayValue[0] + displayValue[displayValue.length - 1];
         }
 
@@ -232,23 +232,25 @@ function isFirstOperation() {
 }
 
 function updateOperatorDisplay(operator) {
-    let operatorSymbol;
+    if (operator) {
+        let operatorSymbol;
 
-    switch (operator) {
-        case "*":
-            operatorSymbol = "x";
-            break;
-        case "/":
-            operatorSymbol = "/";
-            break;
-        case "+":
-            operatorSymbol = "+";
-            break;
-        case "-":
-            operatorSymbol = "-";
-            break;     
+        switch (operator) {
+            case "*":
+                operatorSymbol = "x";
+                break;
+            case "/":
+                operatorSymbol = "/";
+                break;
+            case "+":
+                operatorSymbol = "+";
+                break;
+            case "-":
+                operatorSymbol = "-";
+                break;     
+        }
+        memoryEl.textContent = `${num1} ${operatorSymbol} `;
     }
-    memoryEl.textContent = `${num1} ${operatorSymbol} `;
 }
 
 function pressOperatorButton (currentOperator) {
@@ -263,7 +265,7 @@ function pressOperatorButton (currentOperator) {
         equals()
     }
     operator = currentOperator;
-    if (!numKeysUntouched) {equals()}              
+    if (!numKeysUntouched) {equals()}   //&& operator     
     updateOperatorDisplay(operator)
 }
 
@@ -300,6 +302,5 @@ function displayErrorMessage () {
         displayValue = "we dont do that around here"
 }
 
-//implement display length limit and result rounding
-
-//fix pesky error: sometimes when the operator display is updated, operator is undefined
+//fix pesky error: sometimes when the operator display is updated, operator is undefined, example: "32 + 3 = 3 +"
+//should be fixed
