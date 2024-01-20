@@ -183,13 +183,13 @@ function equals() {
                 console.log(`first number is ${num1}`);
                 console.log(`the second number is ${num2}`)
                 memoryEl.textContent += num2;
-                result = Math.round((operate(operator, num1, num2)) * 100000000) / 100000000;
+                result = Math.round((operate(operator, num1, num2)) * 100000000) / 100000000;               //calculate, round down and display result
                 console.log(`result of calculation is ${result}`)
                 num1 = result;
                 memoryEl.textContent = num1;
 
-                num2 = null;///
-                operator = "";//
+                num2 = null;                                                                                //reset appropriate values
+                operator = "";
                 displayValue = "0";
                 numKeysUntouched = true;
             }
@@ -200,7 +200,7 @@ function equals() {
 }
 
 function clickDelete() {
-    if (displayValue.length === 2 && displayValue.charAt(0) === "-") {                              
+    if (displayValue.length === 2 && displayValue.charAt(0) === "-") {                                  //reset single digit negative number to 0                    
         displayValue = "0"
     } else {
         if (displayValue.charAt(displayValue.length - 2) === ".") {                                     //if there is a decimal that isnt followed by a number, get rid of it
@@ -264,8 +264,8 @@ function pressOperatorButton (currentOperator) {
     } else if (operator !== "" && !numKeysUntouched) {                                              //if a second number was entered, perform calculation instead
         equals()
     }
-    operator = currentOperator;
-    if (!numKeysUntouched) {equals()}   //&& operator     
+    operator = currentOperator;                                                                     //no longer allow change of operator after a second number is entered
+    if (!numKeysUntouched) {equals()}               
     updateOperatorDisplay(operator)
 }
 
