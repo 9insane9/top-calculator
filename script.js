@@ -183,7 +183,7 @@ function equals() {
                 console.log(`first number is ${num1}`);
                 console.log(`the second number is ${num2}`)
                 memoryEl.textContent += num2;
-                result = Math.round((operate(operator, num1, num2)) * 100000000) / 100000000;               //calculate, round down and display result
+                result = Math.round((operate(operator, num1, num2)) * 100000) / 100000;               //calculate, round down and display result
                 console.log(`result of calculation is ${result}`)
                 num1 = result;
                 memoryEl.textContent = num1;
@@ -286,7 +286,7 @@ function divide (a, b) {
 }
 
 function numberTooLong() {
-    return displayValue.length > 15
+    return displayValue.length > 8
 }
 
 function checkForIllegalOperation () {                                                              //prevent division by 0
